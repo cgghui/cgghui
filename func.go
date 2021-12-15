@@ -1,8 +1,10 @@
 package cgghui
 
 import (
+	"bytes"
 	"crypto/md5"
 	"encoding/hex"
+	"io/ioutil"
 	"math/rand"
 	"strconv"
 	"time"
@@ -51,4 +53,40 @@ func Str2Int(s string, def int) int {
 		i = def
 	}
 	return i
+}
+
+// LoadFileLine 加载文件 按行读取
+func LoadFileLine(filePath string, call func([]byte) bool) error {
+	lines, err := ioutil.ReadFile(filePath)
+	if err != nil {
+		return err
+	}
+	for _, line := range bytes.Split(lines, []byte{10}) {
+		line = bytes.TrimSpace(line)
+		if len(line) == 0 {
+			continue
+		}
+		if !call(line) {
+			break
+		}
+	}
+	return nil
+}
+
+// LoadFileLineNo 加载文件 按行读取 (带行号)
+func LoadFileLineNo(filePath string, call func(int, []byte) bool) error {
+	lines, err := ioutil.ReadFile(filePath)
+	if err != nil {
+		return err
+	}
+	for no, line := range bytes.Split(lines, []byte{10}) {
+		line = bytes.TrimSpace(line)
+		if len(line) == 0 {
+			continue
+		}
+		if !call(no, line) {
+			break
+		}
+	}
+	return nil
 }
