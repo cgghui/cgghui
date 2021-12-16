@@ -34,6 +34,11 @@ func RandomSliceString(arr *[]string) string {
 	return (*arr)[rand.Intn(len(*arr))]
 }
 
+// RandomSliceKey 从切片中随机返回
+func RandomSliceKey(max int) int {
+	return rand.Intn(max)
+}
+
 // MD5Byte MD5值
 func MD5Byte(str []byte) string {
 	h := md5.New()
