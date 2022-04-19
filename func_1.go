@@ -5,8 +5,12 @@ import (
 	"crypto/md5"
 	"encoding/hex"
 	"io/ioutil"
+	"log"
 	"math/rand"
+	"os"
+	"os/signal"
 	"strconv"
+	"syscall"
 	"time"
 )
 
@@ -94,4 +98,11 @@ func LoadFileLineNo(filePath string, call func(int, []byte) bool) error {
 		}
 	}
 	return nil
+}
+
+func WaitQuitSignal() {
+	quit := make(chan os.Signal)
+	signal.Notify(quit, syscall.SIGINT, syscall.SIGTERM)
+	<-quit
+	log.Println("Byte.")
 }
